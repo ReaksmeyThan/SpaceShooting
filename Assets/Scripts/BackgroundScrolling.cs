@@ -5,32 +5,24 @@ using UnityEngine.UI;
 
 public class BackgroundScrolling : MonoBehaviour
 {
-    private Vector3 startPosition;
-    [SerializeField] private float scrollSpeed;
-    [SerializeField] private float tileSizeZ;
 
     [SerializeField]
     private List<Sprite> sp_list = new List<Sprite>();
+    public Material material_;
+    public float speed = 0.1f;
 
-    void Start()
+    private void Start()
     {
-        startPosition = transform.position;    
-     
+        material_ = gameObject.GetComponent<Image>().material;
     }
 
-    void Update()
+    private void Update()
     {
         if (Input.GetKeyUp(KeyCode.Space))
         {
             gameObject.GetComponent<Image>().sprite = sp_list[Random.Range(0, sp_list.Count)];
-            gameObject.transform.GetChild(0).GetComponentInChildren<Image>().sprite = this.gameObject.GetComponent<Image>().sprite;
+        
         }
-
-        Scrolling();
-    }
-        void Scrolling()
-    {
-        float newPosition = Mathf.Repeat(Time.time * scrollSpeed, tileSizeZ);
-        transform.position = startPosition + Vector3.down * newPosition;
+        material_.mainTextureOffset += new Vector2(0,speed*Time.deltaTime);
     }
 }
